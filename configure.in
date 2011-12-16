@@ -1,0 +1,19 @@
+AC_INIT
+AM_CONFIG_HEADER(config.h)
+AM_INIT_AUTOMAKE(Sandbox,0.1)
+AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_RANLIB
+AC_PROG_INSTALL
+
+AC_CHECK_HEADERS(pthread.h GL/gl.h GL/glew.h SDL.h)
+AC_CHECK_LIB(pthread, pthread_create)
+AC_CHECK_LIB(GL, glBegin)
+AC_CHECK_LIB(GLEW, glewInit)
+AC_CHECK_LIB(SDL-1.1, SDL_InitSubSystem)
+
+AC_OUTPUT(Makefile src/Makefile src/EngineCore/Makefile src/TestApp/Makefile \
+  src/GLCloud1/Makefile src/GLCloud2/Makefile src/GLCloud3/Makefile \
+  src/ScatterCPU/Makefile src/ScatterGPU/Makefile src/Planet_Quad/Makefile \
+  src/bin/Makefile)
+

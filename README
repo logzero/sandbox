@@ -1,0 +1,40 @@
+Sandbox 0.1
+My Sandbox project is exactly what it's name implies. It's a place for me to put toys I want to play with. All of my source code is published under the BSD license, but I am using a few third-party libraries that have their own licenses: SDL, png, and glew. (If you can't accept their licensing restrictions, it should be easy for you to remove them from my code.) For those of you who have read my online articles and looked at my previous code, this is a complete refactoring of the code. I switched to STL for most of the container classes and I borrowed some ideas from the Enginuity series of articles on GameDev.net. Otherwise, some of the code came from my older projects and some of it is brand new.
+
+Compiling and running in BSD and Linux:
+These apps were originally written for Windows, so all of my applications currently assume that data files can be accessed from the current working directory. On top of that, I'm still a bit green when it comes to *nix makefiles/automate/autoconf, so for now you should not run "make install". This is how I build/run them in FreeBSD 6.0:
+
+$ ./configure CPPFLAGS="-I/usr/local/include -I/usr/X11R6/include -I/usr/local/include/SDL11" LDFLAGS="-L/usr/local/lib -L/usr/X11R6/lib"
+$ make
+$ cd src/bin
+$ ./<program>.sh
+
+I have only been able to test this package on FreeBSD 6.0 with a GeForce 6800 graphics card. Aside from the font class I use to display the FPS and other info (which uses wglUseFontBitmaps), everything seems to work the same in FreeBSD as it does in Windows. It runs noticeably slower in FreeBSD, but I imagine that has more to do with X than the OS. If someone would scrap X and create a good windowing system for BSD based entirely on OpenGL 2.0, I would drop Windows in a heart-beat (it would be awesome for game consoles of all sizes as well).
+
+Directories under src:
+EngineCore - A shared static library used by all of the projects.
+TestApp - The hello world of OpenGL programs, an unlit colored triangle. This one is actually a bit fancier, as it uses GL_EXT_framebuffer_object to render to an FP16 texture, and then runs a shader that applies an exposure function to resample it down to 8-bit color (i.e. simple HDR rendering).
+GLCloud1 - A port of my first cloud implementation (lots of little cloud cells for detail, but without impostoring).
+GLCloud2 - A port of an alternate volumetric cloud implementation (3D noise texture for detail).
+GLCloud3 - Another volumetric rendering test. (Projected cubes based on projected tetrahedra.)
+ScatterCPU - My CPU-based atmospheric scattering algorithm.
+ScatterGPU - My GPU-based atmospheric scattering algorithm.
+Planet - My latest planet rendering algorithm. It uses a chunked quad-tree for dynamic LOD. It dynamically generates 2D ground textures and bump maps, and uses the shaders from ScatterGPU. Try pressing 'u' to stop updating the quad-tree and then fly around. This is very useful for seeing how the triangles are optimized for a specific viewpoint (it also stops the light source from moving.).
+
+Common Keyboard Commands:
+The camera controls are similar to the old Descent games, except for the fact that w/s/a/d accelerate the camera in a certain direction instead of simply moving it. Hold down the control key to accelerate more quickly (useful when moving around the planet), and expect to use the space bar a lot to stop. It's annoying when trying to hug the surface of the planet, but once you get the hang of it, you'll realize it offers pretty good control for maneuvering to specific viewpoints you need to look at.
+
+<Escape>	Exit
+w		Thrust forward
+s		Thrust reverse
+a		Thrust left
+d		Thrust right
+q		Rotate left
+e		Rotate right
+<Ctrl>		Boost thrusters 100x
+<space>		Full stop
+<arrow keys>	Turn camera
+p		Toggle polygon mode (fill/wireframe)
+h		Toggle HDR rendering
++/-		Increase/decrease exposure constant for HDR rendering
+
