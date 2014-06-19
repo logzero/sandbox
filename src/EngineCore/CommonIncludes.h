@@ -40,6 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <math.h>
 #include <float.h>
 #include <stdarg.h>
+#include <time.h>
 
 // Windows headers
 #ifdef _WIN32
@@ -64,11 +65,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <list>
 #include <map>
 #include <algorithm>
-
-// libpng headers
-extern "C" {
-	#include <png.h>
-};
 
 // OpenGL/SDL headers
 #include <GL/glew.h>

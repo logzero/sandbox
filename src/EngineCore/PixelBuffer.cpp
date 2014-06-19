@@ -29,6 +29,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "EngineCore.h"
 
+// libpng headers
+extern "C" {
+	#include <png.h>
+	#include <pngstruct.h>
+	#include <pnginfo.h>
+};
+
 
 bool CPixelBuffer::LoadPNG(const char *pszFile)
 {
@@ -500,7 +507,7 @@ void flip(unsigned char *image, int width, int height, int size, int format)
 
 		switch(format)
 		{
-			case GL_COMPRESSED_RGBA_S3TC_DXT1_EXT: 
+			case GL_COMPRESSED_RGBA_S3TC_DXT1_EXT:
 				linesize=xblocks*8;
 
 				for(j=0;j<(yblocks>>1);j++)
@@ -578,7 +585,7 @@ bool CPixelBuffer::LoadDDS(const char *pszFile)
 		Init(dds.Width, dds.Height, 1, 4, GL_RGBA);
 	else if (dds.pfFlags == DDS_RGB  && dds.pfRGBBitCount == 24)
 		Init(dds.Width, dds.Height, 1, 3, GL_RGB);
-	else 
+	else
 	{
 		LogError("Attempting to read an unsupported format from %s.", pszFile);
 		fclose(stream);
