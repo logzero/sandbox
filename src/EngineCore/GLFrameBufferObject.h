@@ -33,9 +33,6 @@ protected:
 			case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
 				LogError("Framebuffer incomplete, missing attachment");
 				break;
-			case GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT_EXT:
-				LogError("Framebuffer incomplete, duplicate attachment");
-				break;
 			case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
 				LogError("Framebuffer incomplete, attached images must have same dimensions");
 				break;
