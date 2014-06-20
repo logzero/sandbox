@@ -29,11 +29,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "EngineCore.h"
 
-// libpng headers
 extern "C" {
 	#include <png.h>
-	#include <pngstruct.h>
-	#include <pnginfo.h>
 };
 
 
@@ -57,8 +54,6 @@ bool CPixelBuffer::LoadPNG(const char *pszFile)
 
 	png_structp png_ptr;
 	png_infop info_ptr;
-	png_bytep *row_pointers;
-
 	if((png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL)) == NULL)
 	{
 		LogError("png_create_read_struct failed.");
@@ -77,10 +72,15 @@ bool CPixelBuffer::LoadPNG(const char *pszFile)
 	png_set_sig_bytes(png_ptr, 8);
 	png_read_info(png_ptr, info_ptr);
 
-	if(info_ptr->color_type == PNG_COLOR_TYPE_RGB && info_ptr->bit_depth == 8)
-		Init(info_ptr->width, info_ptr->height, 1, 3, GL_RGB);
-	else if(info_ptr->color_type == PNG_COLOR_TYPE_RGB_ALPHA && info_ptr->bit_depth == 8)
-		Init(info_ptr->width, info_ptr->height, 1, 4, GL_RGBA);
+	png_byte color_type = png_get_color_type(png_ptr, info_ptr);
+	png_byte bit_depth = png_get_bit_depth(png_ptr, info_ptr);
+	png_uint_32 width = png_get_image_width(png_ptr, info_ptr);
+	png_uint_32 height = png_get_image_height(png_ptr, info_ptr);
+
+	if(color_type == PNG_COLOR_TYPE_RGB && bit_depth == 8)
+		Init(width, height, 1, 3, GL_RGB);
+	else if(color_type == PNG_COLOR_TYPE_RGB_ALPHA && bit_depth == 8)
+		Init(width, height, 1, 4, GL_RGBA);
 	else
 	{
 		LogError("Attempting to read an unsupported format from %s.", pszFile);
@@ -92,7 +92,7 @@ bool CPixelBuffer::LoadPNG(const char *pszFile)
 	int nRowSize = m_nWidth * m_nChannels;
 	png_read_update_info(png_ptr, info_ptr);
 	setjmp(png_jmpbuf(png_ptr));
-	row_pointers = new png_bytep[m_nHeight];
+	png_bytep *row_pointers = new png_bytep[m_nHeight];
 	for(int y=0; y<m_nHeight; y++)
 		row_pointers[y] = (unsigned char *)m_pBuffer + y * nRowSize;
 	png_read_image(png_ptr, row_pointers);
